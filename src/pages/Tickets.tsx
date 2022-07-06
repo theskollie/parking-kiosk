@@ -18,7 +18,7 @@ const Tickets = () => {
         <Box
           sx={{
             width: "100%",
-            height: "90vh",
+            height: "92vh",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -58,7 +58,7 @@ const Tickets = () => {
 
   return (
     <>
-      {id !== null && (
+      {
         <>
           <LotInfoMUI />
 
@@ -77,7 +77,10 @@ const Tickets = () => {
               position: "relative",
             }}
           >
-            <ClientTicketMUI id={id} timeEntered={myTicket.entertime} />
+            <ClientTicketMUI
+              id={id}
+              timeEntered={new Date(myTicket.entertime)}
+            />
             <Paper
               sx={{
                 backgroundColor: "rgba(0,0,0,0.55)",
@@ -92,7 +95,7 @@ const Tickets = () => {
             </Paper>
           </Box>
         </>
-      )}
+      }
     </>
   );
 };

@@ -1,4 +1,5 @@
 import { Box, Button, Slider, Typography } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 import React, { useState } from "react";
 
 //Redux
@@ -20,6 +21,10 @@ const LotConfig = () => {
   const [newCapacity, setNewCapacity] = useState(capacity);
   const [newHourlyRate, setNewHourlyRate] = useState(hourlyRate);
   const [changes, setChanges] = useState(false);
+  const [snackInfo, setSnackInfo] = useState({
+    open: false,
+    message: "Default",
+  });
 
   const dispatch = useDispatch();
 
@@ -40,11 +45,17 @@ const LotConfig = () => {
       changes = true;
     }
     if (changes === true) {
-      alert("Update Complete");
+      setSnackInfo({
+        message: "Update Complete",
+        open: true,
+      });
       setChanges(false);
       return;
     }
-    alert("No Changes Made");
+    setSnackInfo({
+      message: "No changes made.",
+      open: true,
+    });
     setChanges(false);
   };
 
@@ -95,6 +106,17 @@ const LotConfig = () => {
           </Button>
         )}
       </Box>
+      <Snackbar
+        open={snackInfo.open}
+        message={snackInfo.message}
+        autoHideDuration={4000}
+        onClose={() =>
+          setSnackInfo({
+            ...snackInfo,
+            open: false,
+          })
+        }
+      />
     </Box>
   );
 };

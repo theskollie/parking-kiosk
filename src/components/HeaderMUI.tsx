@@ -2,7 +2,6 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 //MUI Icons
@@ -18,7 +17,10 @@ export default function HeaderMUI() {
           <Box sx={{ flexGrow: 1 }}>
             <Link to="/">
               <Button
-                sx={{ color: "white", fontSize: "20px" }}
+                sx={{
+                  color: "white",
+                  fontSize: "20px",
+                }}
                 size="large"
                 variant="text"
                 startIcon={<DirectionsCarIcon />}
@@ -28,12 +30,22 @@ export default function HeaderMUI() {
             </Link>
           </Box>
           <Link to="/">
-            <Button sx={{ color: "white" }} variant="text" color="error">
+            <Button
+              sx={{ color: "white" }}
+              variant="text"
+              color="error"
+              name="home"
+            >
               Home
             </Button>
           </Link>
           <Link to="/tickets">
-            <Button sx={{ color: "white" }} variant="text" color="error">
+            <Button
+              sx={{ color: "white" }}
+              variant="text"
+              color="error"
+              name="payment"
+            >
               Payment
             </Button>
           </Link>

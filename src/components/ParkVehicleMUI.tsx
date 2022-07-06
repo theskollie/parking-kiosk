@@ -9,22 +9,42 @@ import { assign, deassign } from "../features/ticketSlice";
 import { RootState } from "../features/store";
 
 //MUI
-import { Container, Typography, Button, Box, Paper } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Paper,
+  Alert,
+  AlertColor,
+} from "@mui/material";
 import TollIcon from "@mui/icons-material/Toll";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Snackbar, { snackbarClasses } from "@mui/material/Snackbar";
 
 import { v4 as uuidv4 } from "uuid";
 
 interface Client {
   id: string;
-  entertime: Date;
+  entertime: string;
   paid: boolean;
+}
+
+interface SnackProps {
+  opened: boolean;
+  message: string;
+  severity: AlertColor;
 }
 
 const ParkVehicleMUI = () => {
   const dispatch = useDispatch();
   const available = useSelector((state: RootState) => state.lot.available);
   const navigate = useNavigate();
+  const [snackBarInfo, setSnackBarInfo] = useState<SnackProps>({
+    opened: false,
+    message: "Default",
+    severity: "success",
+  });
 
   const [id, setID] = useState(localStorage.getItem("id"));
   const clients = useSelector((state: RootState) => state.ticket.clients);
@@ -43,19 +63,31 @@ const ParkVehicleMUI = () => {
       dispatch(deassign(currentClient.id));
       dispatch(leave());
       setID(null);
-      alert("Thank you for visiting. Goodbye!");
+      setSnackBarInfo({
+        ...snackBarInfo,
+        message: "Thank you for visiting!",
+        opened: true,
+      });
       return;
     }
-    alert("You have not paid.");
+    setSnackBarInfo({
+      severity: "error",
+      message: "You have not paid.",
+      opened: true,
+    });
   };
 
   const enterLot = () => {
     if (available === 0) {
-      alert("Lot Full. Sorry!");
+      setSnackBarInfo({
+        severity: "error",
+        message: "Lot Full!",
+        opened: true,
+      });
       return false;
     }
     const id = uuidv4();
-    const date = new Date();
+    const date = new Date().toJSON();
     dispatch(
       assign({
         id,
@@ -78,7 +110,7 @@ const ParkVehicleMUI = () => {
     >
       <Container
         sx={{
-          height: "90vh",
+          height: "93vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -108,6 +140,7 @@ const ParkVehicleMUI = () => {
                   variant="contained"
                   startIcon={<TollIcon />}
                   onClick={() => enterLot()}
+                  name="enterLot"
                 >
                   Enter Lot
                 </Button>
@@ -125,6 +158,7 @@ const ParkVehicleMUI = () => {
                   variant="contained"
                   startIcon={<LogoutIcon />}
                   onClick={() => exitLot()}
+                  name="exitLot"
                 >
                   Exit Lot
                 </Button>
@@ -133,6 +167,21 @@ const ParkVehicleMUI = () => {
           )}
         </Paper>
       </Container>
+
+      <Snackbar
+        open={snackBarInfo.opened}
+        autoHideDuration={4000}
+        onClose={() =>
+          setSnackBarInfo({
+            ...snackBarInfo,
+            opened: false,
+          })
+        }
+      >
+        <Alert severity={snackBarInfo.severity} sx={{ width: "100%" }}>
+          {snackBarInfo.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

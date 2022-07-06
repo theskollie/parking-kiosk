@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ClientTicketMUI from "./ClientTicketMUI";
 import { useSelector } from "react-redux";
 import { RootState } from "../features/store";
@@ -8,17 +8,18 @@ import { Container } from "@mui/system";
 const CurrentTickets = () => {
   const clients = useSelector((state: RootState) => state.ticket.clients);
 
-  const cards = clients.map((client) => {
-    return (
-      <Grid item xs={4}>
-        <ClientTicketMUI
-          key={client.id}
-          id={client.id}
-          timeEntered={client.entertime}
-        />
-      </Grid>
-    );
-  });
+  const cards = useMemo(() => {
+    return clients.map((client) => {
+      return (
+        <Grid key={client.id} item xs={4}>
+          <ClientTicketMUI
+            id={client.id}
+            timeEntered={new Date(client.entertime)}
+          />
+        </Grid>
+      );
+    });
+  }, [clients]);
 
   return (
     <div>
@@ -35,7 +36,9 @@ const CurrentTickets = () => {
           </Grid>
         </Container>
       ) : (
-        <h2>Emtpy Lot..</h2>
+        <Container sx={{ textAlign: "center" }}>
+          <h2>Empty Lot..</h2>
+        </Container>
       )}
     </div>
   );

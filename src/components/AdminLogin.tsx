@@ -1,4 +1,5 @@
 import { Box, Typography, TextField, Button, Paper } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 import React, { useState } from "react";
 
 interface LoginProps {
@@ -7,6 +8,7 @@ interface LoginProps {
 
 const AdminLogin = ({ setAdmin }: LoginProps) => {
   const [value, setValue] = useState("");
+  const [opened, setOpened] = useState(false);
 
   const validateLogin = () => {
     //Store Admin Password in .env or DB in production
@@ -15,7 +17,7 @@ const AdminLogin = ({ setAdmin }: LoginProps) => {
       return;
     }
     setValue("");
-    alert("Incorrect Password");
+    setOpened(true);
   };
 
   return (
@@ -59,6 +61,12 @@ const AdminLogin = ({ setAdmin }: LoginProps) => {
           Login
         </Button>
       </Paper>
+      <Snackbar
+        open={opened}
+        message="Incorrect Password"
+        autoHideDuration={4000}
+        onClose={() => setOpened(false)}
+      />
     </Box>
   );
 };
